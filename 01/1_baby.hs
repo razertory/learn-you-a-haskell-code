@@ -1,8 +1,8 @@
 -- Use ghci as a calculator
 -- Negative numbers
--- Missatges error: 5 + "potato"
--- Function call:
-    -- a b c d
+-- Error messages: 5 + "potato"
+-- Function call: a b c d
+    -- a must be a function; b, c, d its arguments.
     -- no parens nor commas
     -- application is "space"
     -- higher priority
@@ -121,7 +121,7 @@ rangeFloatDodgy = [0.1, 0.3 .. 1] -- expand a float range, weird values...
 -- list comprehensions
 
 comprehensionMultiplesTwo = [x*2 | x <- [1..10]]
-comprehensionMultiplesTwoFilterMultiples = [x*2 | x <- [1..10], x*2 >= 12]
+comprehensionMultiplesTzip  woFilterMultiples = [x*2 | x <- [1..10], x*2 >= 12]
 comprehensionFilterMod = [x | x <- [50..100], x `mod` 7 == 3]
 
 boomBangs xs = [ if x < 10 then "BOOM!" else "BANG!" | x <- xs, odd x]
@@ -169,4 +169,8 @@ zipListDifferentLength = zip [1..] ["i'm","a","turtle"]
 --   length of each side is less than or equal to 10
 --   triangle's perimeter is equal to 24
 --   no duplicates e.g. (1,3,5) == (3,5,1) == (5,3,1) etc
-triples = [ (a,b,c) | c <- [1..10], a <- [1..c], b <- [1..a], a^2 + b^2 == c^2, a+b+c == 24]
+triples = [ (a,b,c) | c <- [1..10],
+                      a <- [1..c],
+                      b <- [1..a],
+                      a^2 + b^2 == c^2,
+                      a+b+c == 24]
