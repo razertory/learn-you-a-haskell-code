@@ -44,7 +44,8 @@ Scala
 
   sealed abstract class List[+A] ......
 
-  +A means covariant on the type argument.
+  +A means covariant on the type argument
+  (-A would have meant contravariant)
 
   Why is this possible?
 
