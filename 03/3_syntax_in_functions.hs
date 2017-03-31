@@ -72,7 +72,8 @@ firstLetter all@(x:xs) = "The first letter of " ++ all ++ " is " ++ [x]
 bmiTell :: Double -> String
 bmiTell bmi
     | bmi <= 18.5 = "You're underweight, you emo, you!"
-    | bmi <= 25.0 = "You're supposedly normal. Pfft, I bet you're ugly!"    	| bmi <= 30.0 = "You're fat! Lose some weight, fatty!"
+    | bmi <= 25.0 = "You're supposedly normal. Pfft, I bet you're ugly!"
+    | bmi <= 30.0 = "You're fat! Lose some weight, fatty!"
     | otherwise = "You're a whale, congratulations!"
 
 max' :: Ord a => a -> a -> a
@@ -89,19 +90,21 @@ a `compare'` b
 bmiTell' :: Double -> Double -> String
 bmiTell' weight height
     | bmi <= 18.5 = "You're underweight, you emo, you!"
-    | bmi <= 25.0 = "You're supposedly normal. Pfft, I bet you're ugly!"    	| bmi <= 30.0 = "You're fat! Lose some weight, fatty!"
+    | bmi <= 25.0 = "You're supposedly normal. Pfft, I bet you're ugly!"
+    | bmi <= 30.0 = "You're fat! Lose some weight, fatty!"
     | otherwise = "You're a whale, congratulations!"
     where bmi = weight / height ^ 2
 
 bmiTell'' :: Double -> Double -> String
 bmiTell'' weight height
     | bmi <= skinny = "You're underweight, you emo, you!"
-    | bmi <= normal = "You're supposedly normal. Pfft, I bet you're ugly!"    	| bmi <= fat = "You're fat! Lose some weight, fatty!"
+    | bmi <= normal = "You're supposedly normal. Pfft, I bet you're ugly!"
+    | bmi <= fat = "You're fat! Lose some weight, fatty!"
     | otherwise = "You're a whale, congratulations!"
     where bmi = weight / height ^ 2
-	  skinny = 18.5
-	  normal = 25.0
-	  fat = 30.0
+          skinny = 18.5
+          normal = 25.0
+          fat = 30.0
 
 
 badGreeting :: String
@@ -120,7 +123,7 @@ initials :: String -> String -> String
 initials firstname lastname = [f] ++ ". " ++ [l] ++ "."
     where (f:_) = firstname
           (l:_) = lastname -- better to do this in function params
-			   -- but illustrated to show possible
+     -- but illustrated to show possible
 
 -- functions in where blocks
 calcBmis :: [(Double, Double)] -> [Double]
@@ -131,9 +134,9 @@ calcBmis xs = [bmi w h | (w, h) <- xs]
 -- let
 cylinder :: Double -> Double -> Double
 cylinder r h =
-	let sideArea = 2 * pi * r * h
-	    topArea = pi * r^2
-	in  sideArea + 2 * topArea
+  let sideArea = 2 * pi * r * h
+      topArea = pi * r^2
+  in  sideArea + 2 * topArea
 
 
 theAnswer = 4 * (let a = 9 in a + 1) + 2
@@ -161,19 +164,21 @@ head'' [] = error "No head for empty lists!"
 head'' (x:_) = x
 
 head''' :: [a] -> a
-head''' xs = case xs of [] -> error "No head for empty list!"
-		        (x:_) -> x
+head''' xs = case xs of
+               [] -> error "No head for empty list!"
+               (x:_) -> x
 
 describeList :: [a] -> String
-describeList ls = "The list is " ++ case ls of [] -> "empty."
-					       [x] -> "a singleton list."
-					       xs -> "a longer list."
+describeList ls = "The list is " ++ case ls of
+                                        [] -> "empty."
+                                        [x] -> "a singleton list."
+                                        xs -> "a longer list."
 
 describeList' :: [a] -> String
 describeList' ls = "The list is " ++ what ls
     where what [] = "empty."
-	  what [x] = "a singleton list."
-	  what xs = "a longer list."
+          what [x] = "a singleton list."
+          what xs = "a longer list."
 
 describeList'' :: [a] -> String
 describeList'' [] = "The list is empty."
