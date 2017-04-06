@@ -18,6 +18,12 @@ reverse' :: [a] -> [a]
 reverse' [] = []
 reverse' (x:xs) = reverse' xs ++ [x]
 
+{-
+* This version is very inefficient due to ++
+* Define ++ (or concat') to see why
+* Define reverse without using ++
+-}
+
 repeat' :: a -> [a]
 repeat' x = x : repeat' x
 
@@ -36,5 +42,5 @@ quicksort :: Ord a => [a] -> [a]
 quicksort [] = []
 quicksort (x:xs) =
   let smallerOrEqual = [a | a <- xs, a <= x]
-      larger = [a | a <- xs, a > x]
+      larger         = [a | a <- xs, a > x]
   in quicksort smallerOrEqual ++ [x] ++ quicksort larger
