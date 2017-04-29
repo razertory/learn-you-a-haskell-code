@@ -17,12 +17,12 @@ data Shape = Circle Point Float | Rectangle Point Point deriving (Show)
 area :: Shape -> Float
 area (Circle _ r) = pi * r ^ 2
 area (Rectangle (Point x1 y1) (Point x2 y2)) =
-	(abs $ x2 - x1) * (abs $ y2 - y1)
+  (abs $ x2 - x1) * (abs $ y2 - y1)
 
 nudge :: Shape -> Float -> Float -> Shape
 nudge (Circle (Point x y) r) a b = Circle (Point (x+a) (y+b)) r
 nudge (Rectangle (Point x1 y1) (Point x2 y2)) a b =
-	Rectangle (Point (x1+a) (y1+b)) (Point (x2+a) (y2+b))
+  Rectangle (Point (x1+a) (y1+b)) (Point (x2+a) (y2+b))
 
 nudgedCircle = nudge (Circle (Point 34 34) 10) 5 10
 
@@ -65,21 +65,21 @@ guy'sFlavour = flavour' guy
 
 -- with record syntax :)
 data Person2 = Person2 { firstName :: String
-		       , lastName :: String
-		       , age :: Int
-		       , height :: Float
-		       , phoneNumber :: String
-		       , flavour :: String } deriving (Show)
+         , lastName :: String
+         , age :: Int
+         , height :: Float
+         , phoneNumber :: String
+         , flavour :: String } deriving (Show)
 
 frank = Person2 "Frank" "J" 12 1.12 "1234123" "arst"
 frank' = Person2 { firstName="Frank", lastName="J"
                  , age=12, height=1.12
-		 , phoneNumber="1234123", flavour="arst" }
+   , phoneNumber="1234123", flavour="arst" }
 
 data Car = Car { company :: String
                , model :: String
-	       , year :: Int
-	       } deriving (Show)
+         , year :: Int
+         } deriving (Show)
 
 -- Can change the order of the fields
 -- Can't do this without record syntax
@@ -106,7 +106,7 @@ data ShapeMaybe = ShNothing | ShJust Shape
 
 tellCar :: Car -> String
 tellCar (Car {company=c, model=m, year=y}) =
-	"This " ++ c ++ " " ++ m ++ " was made in " ++ show y
+  "This " ++ c ++ " " ++ m ++ " was made in " ++ show y
 stang = Car {company="Ford", model="Mustang", year=1967}
 -- parameterising Car value constructor i.e. Car a b c = Car {...
 -- is pointless as tellCar becomes more complicated and we'd end
@@ -137,9 +137,9 @@ v5 = Vector 2 9 3 `vmult` (Vector 4 9 5 `dotProd` Vector 9 2 4)
 -- Derived Instances
 -- Equating People
 data Person3 = Person3 { firstName3 :: String
-		       , lastName3 :: String
-		       , age3 :: Int
-		       } deriving (Eq, Show, Read)
+         , lastName3 :: String
+         , age3 :: Int
+         } deriving (Eq, Show, Read)
 
 mikeD = Person3 {firstName3="Michael", lastName3="Diamond", age3=43}
 adRock = Person3 {firstName3="Adam", lastName3="Horovitz", age3=41}
@@ -157,8 +157,8 @@ showMikeD = show mikeD
 showMikeD' = "mikeD is: " ++ show mikeD
 
 mysteryDude = "Person3 { firstName3=\"Michael\"" ++
-	              ", lastName3=\"Diamond\"" ++
-		      ", age3=43}"
+                ", lastName3=\"Diamond\"" ++
+        ", age3=43}"
 readMysteryDude = read mysteryDude :: Person3
 
 readJust3 = read "Just 3" :: Maybe Int
@@ -177,7 +177,7 @@ just100GtJust50 = Just 100 > Just 50
 
 -- Any Day of the Week
 data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
-	   deriving (Eq, Ord, Show, Read, Bounded, Enum)
+     deriving (Eq, Ord, Show, Read, Bounded, Enum)
 
 wednesday = Wednesday
 showWednesday = show Wednesday
@@ -230,7 +230,7 @@ type AssocList k v = [(k, v)]
 
 -- partially applied type constructor
 type IntMap v = Map.Map Int v
--- or 
+-- or
 type IntMap2 = Map.Map Int
 
 -- don't confuse type synonyms and type constructors
@@ -264,8 +264,8 @@ lockerLookup :: Int -> LockerMap -> Either String Code
 lockerLookup lockerNumber map = case Map.lookup lockerNumber map of
     Nothing -> Left $ "Locker " ++ show lockerNumber ++ " doesn't exist!"
     Just (state, code) -> if state /= Taken
-			     then Right code
-			     else Left $ "Locker " ++ show lockerNumber
+       then Right code
+       else Left $ "Locker " ++ show lockerNumber
                                          ++ " is already taken!"
 
 lockers :: LockerMap
@@ -298,9 +298,9 @@ fourConsFiveCons = 4 `Cons` (5 `Cons` Empty)
 -- improving our list
 infixr 5 :-:       -- fixity: how tightly the operator binds and whether
                    -- it's left or right-associative
-		   -- infixl/infixr
-		   -- bigger number higher precedence
-data List' a = Empty' | a :-: (List' a) deriving (Show, Read, Eq, Ord)
+     -- infixl/infixr
+     -- bigger number higher precedence
+data List' a = Empty' | a :-: List' a deriving (Show, Read, Eq, Ord)
 consing = 3 :-: 4 :-: 5 :-: Empty'
 hundredConsWithConsing = 100 :-: consing
 
