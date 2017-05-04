@@ -11,8 +11,12 @@ import qualified Data.Map as Map
 
 -- data Bool' = False | True
 
-data Point = Point Float Float deriving (Show)
-data Shape = Circle Point Float | Rectangle Point Point deriving (Show)
+data Point = Point Float Float
+  deriving (Show)
+
+data Shape = Circle Point Float
+           | Rectangle Point Point
+  deriving (Show)
 
 area :: Shape -> Float
 area (Circle _ r) = pi * r ^ 2
@@ -65,11 +69,12 @@ guy'sFlavour = flavour' guy
 
 -- with record syntax :)
 data Person2 = Person2 { firstName :: String
-         , lastName :: String
-         , age :: Int
-         , height :: Float
-         , phoneNumber :: String
-         , flavour :: String } deriving (Show)
+                       , lastName :: String
+                       , age :: Int
+                       , height :: Float
+                       , phoneNumber :: String
+                       , flavour :: String
+                       } deriving (Show)
 
 frank = Person2 "Frank" "J" 12 1.12 "1234123" "arst"
 frank' = Person2 { firstName="Frank", lastName="J"
@@ -78,11 +83,12 @@ frank' = Person2 { firstName="Frank", lastName="J"
 
 data Car = Car { company :: String
                , model :: String
-         , year :: Int
-         } deriving (Show)
+               , year :: Int
+               } deriving (Show)
 
 -- Can change the order of the fields
 -- Can't do this without record syntax
+
 myBaby = Car {model="Mustang", company="Ford", year=1967}
 
 -- use record syntax with lots of params that aren't obvious
@@ -91,7 +97,8 @@ myBaby = Car {model="Mustang", company="Ford", year=1967}
 
 -- Type Parameters
 
--- data Maybe a = Nothing | Just a -- Maybe is a type constructor
+data Maybe' a = Nothing' | Just' a -- Maybe is a type constructor
+
 maybeInt = Just 3 :: Maybe Int
 maybeFloat = Just 3 :: Maybe Float
 
@@ -102,12 +109,14 @@ maybeFloat = Just 3 :: Maybe Float
 data IntMaybe = INothing | IJust Int
 data StringMaybe = SNothing | SJust String
 data ShapeMaybe = ShNothing | ShJust Shape
+
 -- type params are better as you don't get ^^ that.
 
 tellCar :: Car -> String
 tellCar (Car {company=c, model=m, year=y}) =
   "This " ++ c ++ " " ++ m ++ " was made in " ++ show y
 stang = Car {company="Ford", model="Mustang", year=1967}
+
 -- parameterising Car value constructor i.e. Car a b c = Car {...
 -- is pointless as tellCar becomes more complicated and we'd end
 -- up using Car String String Int most of the time anyway.
@@ -118,7 +127,9 @@ stang = Car {company="Ford", model="Mustang", year=1967}
 
 -- No type constraint
 data Vector a = Vector a a a deriving (Show)
--- But you still have to for the functions
+
+-- Even if you put it in the type, you still have to put in on the functions
+
 vplus :: Num a => Vector a -> Vector a -> Vector a
 (Vector i j k) `vplus` (Vector l m n) = Vector (i+l) (j+m) (k+n)
 
@@ -137,9 +148,9 @@ v5 = Vector 2 9 3 `vmult` (Vector 4 9 5 `dotProd` Vector 9 2 4)
 -- Derived Instances
 -- Equating People
 data Person3 = Person3 { firstName3 :: String
-         , lastName3 :: String
-         , age3 :: Int
-         } deriving (Eq, Show, Read)
+                       , lastName3 :: String
+                       , age3 :: Int
+                       } deriving (Eq, Show, Read)
 
 mikeD = Person3 {firstName3="Michael", lastName3="Diamond", age3=43}
 adRock = Person3 {firstName3="Adam", lastName3="Horovitz", age3=41}
@@ -157,8 +168,8 @@ showMikeD = show mikeD
 showMikeD' = "mikeD is: " ++ show mikeD
 
 mysteryDude = "Person3 { firstName3=\"Michael\"" ++
-                ", lastName3=\"Diamond\"" ++
-        ", age3=43}"
+              ", lastName3=\"Diamond\"" ++
+              ", age3=43}"
 readMysteryDude = read mysteryDude :: Person3
 
 readJust3 = read "Just 3" :: Maybe Int
@@ -246,7 +257,10 @@ assocListIntInt = [(1,2),(3,5),(8,9)] :: AssocList Int Int
 
 
 -- Go Left, Then Right
-data Either' a b = Left' a | Right' b deriving (Eq, Ord, Read, Show)
+data Either' a b = Left' a
+                 | Right' b
+  deriving (Eq, Ord, Read, Show)
+
 right'20 = Right' 20
 left'woot = Left' "w00t"
 -- :t Right' 'a'
@@ -256,16 +270,23 @@ left'woot = Left' "w00t"
 -- If interested in how/why something failed:
 -- use Left constructor for failures, Right constructor for succes results
 
-data LockerState = Taken | Free deriving (Show, Eq)
+data LockerState = Taken
+                 | Free
+  deriving (Show, Eq)
+
 type Code = String
 type LockerMap = Map.Map Int (LockerState, Code)
 
 lockerLookup :: Int -> LockerMap -> Either String Code
-lockerLookup lockerNumber map = case Map.lookup lockerNumber map of
-    Nothing -> Left $ "Locker " ++ show lockerNumber ++ " doesn't exist!"
-    Just (state, code) -> if state /= Taken
-       then Right code
-       else Left $ "Locker " ++ show lockerNumber
+lockerLookup lockerNumber map
+  = case Map.lookup lockerNumber map of
+      Nothing            -> Left $ "Locker "
+                                    ++ show lockerNumber
+                                    ++ " doesn't exist!"
+      Just (state, code) -> if state /= Taken
+                            then Right code
+                            else Left $ "Locker "
+                                         ++ show lockerNumber
                                          ++ " is already taken!"
 
 lockers :: LockerMap
@@ -285,7 +306,10 @@ locker'' = lockerLookup 109 lockers
 
 -- Recursive Data Structures
 
-data List a = Empty | Cons a (List a) deriving (Show, Read, Eq, Ord)
+data List a = Empty
+            | Cons a (List a)
+  deriving (Show, Read, Eq, Ord)
+
 -- using record syntax
 -- data List a = Empty | Cons { listHead :: a, listTail :: List a }
 --     deriving (Show, Read, Eq, Ord)
@@ -298,16 +322,21 @@ fourConsFiveCons = 4 `Cons` (5 `Cons` Empty)
 -- improving our list
 infixr 5 :-:       -- fixity: how tightly the operator binds and whether
                    -- it's left or right-associative
-     -- infixl/infixr
-     -- bigger number higher precedence
-data List' a = Empty' | a :-: List' a deriving (Show, Read, Eq, Ord)
+                      -- infixl/infixr
+                      -- bigger number higher precedence
+
+data List' a = Empty'
+             | a :-: List' a
+  deriving (Show, Read, Eq, Ord)
+
 consing = 3 :-: 4 :-: 5 :-: Empty'
 hundredConsWithConsing = 100 :-: consing
 
 -- our implementation of ++
 infixr 5 ^++
+
 (^++) :: List' a -> List' a -> List' a
-Empty' ^++ ys = ys
+Empty'     ^++ ys = ys
 (x :-: xs) ^++ ys = x :-: (xs ^++ ys)
 
 listOne = 3 :-: 4 :-: 5 :-: Empty'
@@ -315,7 +344,9 @@ listTwo = 6 :-: 7 :-: Empty'
 listThree = listOne ^++ listTwo
 
 -- Let's Plant a Tree
-data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show)
+data Tree a = EmptyTree
+            | Node a (Tree a) (Tree a)
+  deriving (Show)
 
 singleton :: a -> Tree a
 singleton x = Node x EmptyTree EmptyTree
@@ -324,8 +355,8 @@ treeInsert :: Ord a => a -> Tree a -> Tree a
 treeInsert x EmptyTree = singleton x
 treeInsert x (Node a left right)
     | x == a = Node x left right
-    | x < a = Node a (treeInsert x left) right
-    | x > a = Node a left (treeInsert x right)
+    | x < a  = Node a (treeInsert x left) right
+    | x > a  = Node a left (treeInsert x right)
 
 treeElem :: Ord a => a -> Tree a -> Bool
 treeElem x EmptyTree = False
