@@ -9,7 +9,10 @@ module Shapes
 
 import qualified Data.Map as Map
 
--- data Bool' = False | True
+data Bool' = False' | True'
+
+data Shape' = Circle' Float Float Float
+            | Rectangle' Float Float Float Float
 
 data Point = Point Float Float
   deriving (Show)
