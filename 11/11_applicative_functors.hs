@@ -487,14 +487,19 @@ getZipList $ (,,) <$> ZipList "dog" <*> ZipList "cat" <*> ZipList "rat"
 
 -- Applicative Laws
 --
--- like normal functors, applicative functors have some laws. The most important
--- of which: pure f <*> x == fmap f x
+-- like normal functors, applicative functors have some laws.
 --
 -- The rest are
-pure id <*> v = v
-pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
-pure f <*> pure x = pure (f x)
-u <*> pure y = pure ($ y) <*> u
+pure id <*> v = v                             -- Identity
+pure (.) <*> u <*> v <*> w = u <*> (v <*> w)  -- Composition
+pure f <*> pure x = pure (f x)                -- Homomorphism
+u <*> pure y = pure ($ y) <*> u               -- Interchange
+
+-- These laws imply:
+
+fmap f x = pure f <*> x
+
+
 -- if interested go through these laws with some instances to show they hold.
 
 
