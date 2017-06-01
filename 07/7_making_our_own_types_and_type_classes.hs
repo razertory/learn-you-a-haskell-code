@@ -9,10 +9,11 @@ module Shapes
 
 import qualified Data.Map as Map
 
-data Bool' = False' | True'
+data Bool' = False' | True' deriving Show
 
 data Shape' = Circle' Float Float Float
             | Rectangle' Float Float Float Float
+            deriving Show
 
 data Point = Point Float Float
   deriving (Show)
@@ -82,7 +83,7 @@ data Person2 = Person2 { firstName :: String
 frank = Person2 "Frank" "J" 12 1.12 "1234123" "arst"
 frank' = Person2 { firstName="Frank", lastName="J"
                  , age=12, height=1.12
-   , phoneNumber="1234123", flavour="arst" }
+                 , phoneNumber="1234123", flavour="arst" }
 
 data Car = Car { company :: String
                , model :: String
