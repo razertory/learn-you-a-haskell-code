@@ -11,7 +11,7 @@ putStrLn "hello, wolrd" :: IO ()
 
 
 -- Gluing IO actions together
-{-
+{- see 8_hello_world.hs
 main = do
     putStrLn "Hello, what's your name?"
     name <- getLine
