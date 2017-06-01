@@ -86,8 +86,6 @@ instance Functor ((->) r) where
 instance Functor ((->) r) where
     fmap = (.)
 
-import Control.Monad.Instances
-
 a = fmap (*3) (+100) 1
 b = (*3) `fmap` (+100) $ 1
 c = (*3) . (+100) $ 1
