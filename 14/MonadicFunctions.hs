@@ -53,4 +53,4 @@ alternate :: a -> State Bool Bool
 alternate _ = state $ \b -> (b, not b)
 
 oneInOneOut :: Bool -> [a] -> [a]
-oneInOneOut b as = fst $ runState $ filterM' alternate as b
+oneInOneOut b as = fst $ runState (filterM' alternate as) b
