@@ -6,7 +6,8 @@
 
 -- Upgrading our Applicative Functors
 --
--- With Functors, we saw it was possible to map functions over various data types using Functor type class.
+-- With Functors, we saw it was possible to map functions over various data
+-- types using Functor type class.
 fmap :: (Functor f) => (a -> b) -> f a -> f b
 --
 -- What if the function a -> b is already wrapped inside a functor value?
@@ -100,7 +101,7 @@ Just 1 `applyMaybe` \x -> if x > 2 then Just x else Nothing
 
 
 -- The Monad Type Class
-class Monad m where
+class Applicative m => Monad m where
     return :: a -> m a
 
     (>>=) :: m a -> (a -> m b) -> m b
@@ -110,6 +111,8 @@ class Monad m where
 
     fail    :: String -> m a
     fail msg = error msg
+
+-- This is no longer true:
 -- it doesn't say class (Applicative m) => Monad m where because when
 -- Haskell was made it didn't occur that applicative functors were a good
 -- fit for Haskell... But every monad is an applicative functor.
@@ -302,7 +305,15 @@ Just 3 >>= (\x -> Just "!" >>= (\y -> Nothing)
 -- Nothing
 -- It's kind of like assigning values to variables in let expressions. To
 -- further illustrate this:
-foo :: Maybe String
+
+let x = 3
+    y = "!"
+in show x ++ y
+
+foo' = 3 -: (\x ->
+      "!" -: (\y ->
+      show x + y))
+
 foo = Just 3   >>= (\x ->
       Just "!" >>= (\y ->
       Just (show x ++ y)))
@@ -312,7 +323,7 @@ foo :: Maybe String
 foo = do
     x <- Just 3
     y <- Just "!"
-    Just (show x ++ y)
+    return (show x ++ y)
 -- So each of lines is nested within the line above if converted back to
 -- >>= notation
 
@@ -321,7 +332,8 @@ foo = do
 
 -- In a do expression, every line that isn't a let line is a monadic value.
 -- We use <- to inspect its result. The last monadic value in a do
--- expression can't be used with <- to bind its result, it wouldn't make sense when translated back to >>= chain.
+-- expression can't be used with <- to bind its result, it wouldn't make sense
+-- when translated back to >>= chain.
 Just 9 >>= (\x -> Just (x > 8))
 -- Just True
 marySue :: Maybe Bool
@@ -466,7 +478,8 @@ listOfTuples  = do
 -- need to look at the guard function on the MonadPlus type class.
 
 -- MonadPlus type class is for monads that can also act as monoids.
-class Monad m => MonadPlus m where
+-- Modern version adds Alternative m as a constraint
+class (Alternative m, Monad m) => MonadPlus m where
     mzero :: m a
     mplus :: m a -> m a -> m a
 -- mzero is synonymous with mempty from Monoid, and mplus corresponds to
@@ -478,6 +491,7 @@ instance MonadPlus [] where
     mplus = (++)
 -- mzero for lists is failure. mplus joins two values into one.
 
+-- nowadays the type is (Alternative m) => Bool -> m ()
 guard      :: (MonadPlus m) => Bool -> m ()
 guard True  = return ()
 guard False = mzero
@@ -491,7 +505,7 @@ guard (1 > 2) :: Maybe ()
 guard (5 > 2) :: [()]
 -- [()]
 guard (1 > 2) :: [()]
--- Nothing
+-- []
 
 -- we can use guard like so:
 [1..50] >>= (\x -> guard ('7' `elem` show x) >> return x)
@@ -646,7 +660,7 @@ concat [[1],[2],[3],[4]]
 -- minimal
 
 -- Associativity
-(m >>= f) >>= g == m >>= (\x f x >>= g)
+(m >>= f) >>= g == m >>= (\x -> f x >>= g)
 -- It shouldn't matter how a chain of function applications using bind
 -- is nested
 
