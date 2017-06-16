@@ -11,8 +11,8 @@ fromDiffList (DiffList f) = f []
 
 -- Here is the monoid instance:
 instance Monoid (DiffList a) where
-    mempty = DiffList (\xs -> [] ++ xs)
-    (DiffList f) `mappend` (DiffList g) = DiffList (\xs -> f (g xs))
+    mempty = DiffList id
+    (DiffList f) `mappend` (DiffList g) = DiffList (f . g)
 
 -- Notice how mempty is just id. And mappend is just function composition.
 
@@ -49,5 +49,5 @@ finalCountDownSlow x = do
     finalCountDownSlow (x-1)
     tell [show x]
 
-countdownFast = mapM_ putStrLn . fromDiffList . snd . runWriter $ finalCountDownFast 500000
-countdownSlow = mapM_ putStrLn . snd . runWriter $ finalCountDownSlow 500000
+countdownFast = mapM_ putStrLn . fromDiffList . snd . runWriter $ finalCountDownFast 5000
+countdownSlow = mapM_ putStrLn . snd . runWriter $ finalCountDownSlow 5000

@@ -42,8 +42,10 @@ When dealing with Maybe, we made a function applyMaybe. In the same vein,
 let's make an applyLog function. It will make sure that the log of the
 original value is not lost when computing a new value.
 
-> applyLog           :: (a, String) -> (a -> (b, String)) -> (b, String)
-> applyLog (x, log) f = let (y, newLog) = f x in (y, log ++ newLog)
+> applyLog :: (a, String) -> (a -> (b, String)) -> (b, String)
+> applyLog (x, log) f
+>       = let (y, newLog) = f x
+>         in (y, log ++ newLog)
 
 > (3, "Smallish gang.") `applyLog` isBigGang
 <>(False,"Smallish gang.Compared gang size to 9.")
@@ -76,7 +78,9 @@ for appending.
 So now we need to change applyLog to:
 
 > applyLog :: (Monoid m) => (a, m) -> (a -> (b, m)) -> (b, m)
-> applyLog (x, log) f = let (y, newLog) = f x in (y, log `mappend` newLog)
+> applyLog (x, log) f
+>     = let (y, newLog) = f x
+>       in (y, log `mappend` newLog)
 
 And it can work on any monoid. We no longer need to think about the tuple
 as a value and a log; now we can think of a value combined with a monoid
@@ -307,8 +311,8 @@ Where f and g are functions that take lists and prepend something to them
 
 Here is the monoid instance:
 > instance Monoid (DiffList a) where
->     mempty = DiffList (\xs -> [] ++ xs)
->     (DiffList f) `mappend` (DiffList g) = DiffList (\xs -> f (g xs))
+>     mempty = DiffList id
+>     (DiffList f) `mappend` (DiffList g) = DiffList (f . g)
 
 Notice how mempty is just id. And mappend is just function composition.
 
@@ -398,7 +402,8 @@ function to something in order to get the resut
 >     return x = \_ -> x
 >     h >>= f  = \w -> f (h w) w
 
-Bind looks a bit cryptic here: Because we are using functions as monads, we return \w ... from >>=. To get the result from a function we need to apply
+Bind looks a bit cryptic here: Because we are using functions as monads, we
+return \w ... from >>=. To get the result from a function we need to apply
 it to h first, hence (h w). The result is then passed to f which returns a
 monadic value (a function in this case) and so we apply that to w as well.
 
