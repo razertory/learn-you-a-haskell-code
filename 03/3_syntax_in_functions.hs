@@ -138,6 +138,11 @@ cylinder r h =
       topArea = pi * r^2
   in  sideArea + 2 * topArea
 
+cylinder' r h = 
+    sideArea + 2 * topArea
+        where sideArea = 2 * pi * r * h
+              topArea = pi * r^2
+
 
 theAnswer = 4 * (let a = 9 in a + 1) + 2
 letLocalFunction = [let square x = x*x in (square 5, square 3, square 2)]

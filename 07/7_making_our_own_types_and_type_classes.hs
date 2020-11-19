@@ -191,8 +191,7 @@ just100GtJust50 = Just 100 > Just 50
 
 
 -- Any Day of the Week
-data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
-     deriving (Eq, Ord, Show, Read, Bounded, Enum)
+data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday deriving (Eq, Ord, Show, Read, Bounded, Enum)
 
 wednesday = Wednesday
 showWednesday = show Wednesday
@@ -209,6 +208,7 @@ minMaxRangeDay = [minBound .. maxBound] :: [Day]
 
 
 -- Type Synonyms
+-- 类型别名（同义）
 
 -- [Char] and String are type synonyms.
 -- defined as: type String = [Char]

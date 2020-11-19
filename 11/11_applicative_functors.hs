@@ -4,7 +4,7 @@
 -- They are described by the type class Functor which has one type class method
 -- fmap
 --
-:t fmap
+-- :t fmap
 -- fmap :: (a -> b) -> f a -> f b
 --
 -- to make a type constructor an instance of Functor, its kind must be
@@ -16,13 +16,14 @@
 -- instance Functor (Either a) where
 --
 -- its type would then be:
-:t fmap
+-- :t fmap
 -- fmap :: (b -> c) -> Either a b -> Either a c
 
 
 -- IO Actions as Functors
 --
 -- IO is an instance of Functor
+-- 其中 do 关键字引入一个块，标识那些带有副作用的代码，比如对文件进行读和写操作。被 do 包围的 <- 操作符效果等同于赋值
 instance Functor IO where
     fmap f action = do
         result <- action
@@ -403,6 +404,7 @@ myAction :: IO String
 myAction = do a <- getLine
               b <- getLine
               return $ a ++ b
+
 -- or in applicative style
 myAction :: IO String
 myAction = (++) <$> getLine <*> getLine
